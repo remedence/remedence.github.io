@@ -1005,7 +1005,7 @@ code {
   }
 }
 
-@media (max-width: 939px) {
+@media (max-width: 1119px) {
   .section,
   .header-inner {
     width: min(100% - 40px, 1240px);
@@ -1135,7 +1135,7 @@ code {
   }
 
   .hero h1 {
-    font-size: clamp(42px, 14vw, 62px);
+    font-size: clamp(40px, 11.5vw, 48px);
   }
 
   .hero-lede {
