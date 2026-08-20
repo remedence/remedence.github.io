@@ -96,6 +96,27 @@ test("keyboard order exposes the skip link and mobile navigation works", async (
   ).toHaveAttribute("aria-expanded", "false");
 });
 
+test("Escape closes mobile navigation and returns focus to the toggle", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+
+  const toggle = page.getByRole("button", { name: "Open navigation" });
+  await toggle.click();
+  await expect(
+    page.getByRole("navigation", { name: "Mobile navigation" }),
+  ).toBeVisible();
+
+  await page.keyboard.press("Escape");
+
+  await expect(
+    page.getByRole("navigation", { name: "Mobile navigation" }),
+  ).toBeHidden();
+  await expect(toggle).toHaveAttribute("aria-expanded", "false");
+  await expect(toggle).toBeFocused();
+});
+
 test("responsive menu stays open until the desktop navigation breakpoint", async ({
   page,
 }) => {

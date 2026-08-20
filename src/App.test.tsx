@@ -68,6 +68,21 @@ describe("Remedence public site", () => {
     );
   });
 
+  it("closes mobile navigation on Escape and restores focus to the toggle", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    const toggle = document.querySelector<HTMLButtonElement>(".menu-toggle");
+    await user.click(toggle!);
+    expect(document.getElementById("mobile-navigation")).toBeInTheDocument();
+
+    await user.keyboard("{Escape}");
+
+    expect(document.getElementById("mobile-navigation")).toBeNull();
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+    expect(toggle).toHaveFocus();
+  });
+
   it("keeps responsive menu open through the mobile navigation breakpoint", async () => {
     const originalWidth = window.innerWidth;
     const user = userEvent.setup();
