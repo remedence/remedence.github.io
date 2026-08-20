@@ -1,7 +1,7 @@
 {
-  "name": "site-scaffold",
+  "name": "@remedence/site",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,21 +11,20 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc -b --pretty false",
-    "format": "prettier --write src/App.tsx src/App.css src/index.css src/App.test.tsx src/test/setup.ts index.html package.json vitest.config.ts",
-    "format:check": "prettier --check src/App.tsx src/App.css src/index.css src/App.test.tsx src/test/setup.ts index.html package.json vitest.config.ts"
+    "format": "prettier --write src/App.tsx src/App.css src/index.css src/App.test.tsx src/test/setup.ts index.html package.json vitest.config.ts tests playwright.config.ts README.md",
+    "format:check": "prettier --check src/App.tsx src/App.css src/index.css src/App.test.tsx src/test/setup.ts index.html package.json vitest.config.ts tests playwright.config.ts README.md",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "@fontsource/ibm-plex-mono": "^5.3.0",
     "@fontsource/ibm-plex-sans": "^5.3.0",
-    "clsx": "^2.1.1",
     "lucide-react": "^1.33.0",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "react-helmet-async": "^3.0.0",
-    "react-router-dom": "^7.18.2",
-    "zod": "^4.4.3"
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.62.1",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.5",
