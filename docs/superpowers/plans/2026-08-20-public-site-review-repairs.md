@@ -16,7 +16,7 @@
 - Do not publish backend, cloud, sign-in, pricing, worker, integration, AI, or authentication claims before those capabilities exist.
 - Do not change the GitHub Pages deployment model.
 - Do not terminate unrelated browser, Node, tunnel, MCP, or gateway processes.
-- Use microscopic commits and run `codex review` before merge.
+- Use microscopic commits and self-review the complete branch diff before merge.
 
 ### Task 1: Establish a Windows-safe formatting baseline
 
@@ -250,13 +250,15 @@ npm run check
 
 Verify desktop, tablet, and mobile navigation, visible focus, reduced motion, 200 percent zoom, no horizontal overflow, no generic AI styling, and truthful CTA destinations. Fix only concrete regressions.
 
-- [ ] **Step 3: Run Codex review**
+- [ ] **Step 3: Run a complete self-review**
 
 ```powershell
-codex review --base origin/main "Review the public-site repair branch. Verify the 1120px responsive boundary, HTTP 4xx and 5xx detection, cross-platform formatting, accessibility, and absence of unsupported product claims."
+git diff origin/main..HEAD --check
+git diff --stat origin/main..HEAD
+git diff -U20 origin/main..HEAD
 ```
 
-Fix all P1 and P2 findings, then rerun `npm run check`.
+Review behavior, tests, accessibility, security, state handling, unsupported product claims, unrelated changes, secrets, local paths, and line-ending churn. Fix concrete findings, then rerun `npm run check`.
 
 - [ ] **Step 4: Push and open PR**
 
@@ -293,4 +295,4 @@ Update copy only for features that shipped, such as local SQLite persistence, ca
 
 - [ ] **Step 4: Re-run the full site workflow**
 
-Run tests, Design & Taste critique, Lighthouse desktop/mobile, Codex review, PR, merge, Pages workflow, and live-browser verification again.
+Run tests, Design & Taste critique, Lighthouse desktop/mobile, complete self-review, PR, merge, Pages workflow, and live-browser verification again.
