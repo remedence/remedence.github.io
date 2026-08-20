@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
   Building2,
@@ -30,6 +30,8 @@ const navItems = [
   ["Partners", "#partners"],
   ["Company", "#company"],
 ] as const;
+
+const MOBILE_NAV_MAX_WIDTH = 1119;
 
 const workflow = [
   {
@@ -72,14 +74,28 @@ const cloudCapabilities = [
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuToggleRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const closeOnWideScreen = () => {
-      if (window.innerWidth >= 940) setMenuOpen(false);
+      if (window.innerWidth > MOBILE_NAV_MAX_WIDTH) setMenuOpen(false);
     };
     window.addEventListener("resize", closeOnWideScreen);
     return () => window.removeEventListener("resize", closeOnWideScreen);
   }, []);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setMenuOpen(false);
+      menuToggleRef.current?.focus();
+    };
+
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [menuOpen]);
 
   return (
     <div className="site-shell">
@@ -123,6 +139,7 @@ function App() {
           </a>
 
           <button
+            ref={menuToggleRef}
             className="menu-toggle"
             type="button"
             aria-expanded={menuOpen}

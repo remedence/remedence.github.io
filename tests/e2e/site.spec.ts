@@ -1,5 +1,36 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+
+interface BrowserFailures {
+  consoleErrors: string[];
+  pageErrors: string[];
+  transportFailures: string[];
+  httpFailures: string[];
+}
+
+function observeBrowserFailures(page: Page): BrowserFailures {
+  const failures: BrowserFailures = {
+    consoleErrors: [],
+    pageErrors: [],
+    transportFailures: [],
+    httpFailures: [],
+  };
+
+  page.on("console", (message) => {
+    if (message.type() === "error") failures.consoleErrors.push(message.text());
+  });
+  page.on("pageerror", (error) => failures.pageErrors.push(error.message));
+  page.on("requestfailed", (request) =>
+    failures.transportFailures.push(request.url()),
+  );
+  page.on("response", (response) => {
+    if (response.status() >= 400) {
+      failures.httpFailures.push(`${response.status()} ${response.url()}`);
+    }
+  });
+
+  return failures;
+}
 
 const viewports = [
   { name: "desktop-1440", width: 1440, height: 900 },
@@ -65,6 +96,46 @@ test("keyboard order exposes the skip link and mobile navigation works", async (
   ).toHaveAttribute("aria-expanded", "false");
 });
 
+test("Escape closes mobile navigation and returns focus to the toggle", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+
+  const toggle = page.getByRole("button", { name: "Open navigation" });
+  await toggle.click();
+  await expect(
+    page.getByRole("navigation", { name: "Mobile navigation" }),
+  ).toBeVisible();
+
+  await page.keyboard.press("Escape");
+
+  await expect(
+    page.getByRole("navigation", { name: "Mobile navigation" }),
+  ).toBeHidden();
+  await expect(toggle).toHaveAttribute("aria-expanded", "false");
+  await expect(toggle).toBeFocused();
+});
+
+test("responsive menu stays open until the desktop navigation breakpoint", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1000, height: 800 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Open navigation" }).click();
+  await expect(
+    page.getByRole("navigation", { name: "Mobile navigation" }),
+  ).toBeVisible();
+  await page.setViewportSize({ width: 1001, height: 800 });
+  await expect(
+    page.getByRole("navigation", { name: "Mobile navigation" }),
+  ).toBeVisible();
+  await page.setViewportSize({ width: 1120, height: 800 });
+  await expect(
+    page.getByRole("navigation", { name: "Mobile navigation" }),
+  ).toBeHidden();
+});
+
 test("public calls to action point only to real destinations", async ({
   page,
 }) => {
@@ -122,24 +193,44 @@ test("desktop and mobile public pages have no automated WCAG AA violations", asy
   }
 });
 
+test("HTTP failures are observed separately from transport failures", async ({
+  page,
+}) => {
+  const failures = observeBrowserFailures(page);
+  await page.route("**/brand/remedence-logo-primary-ui.png", (route) =>
+    route.fulfill({ status: 404, body: "missing" }),
+  );
+  await page.route("**/redirect-probe", (route) =>
+    route.fulfill({ status: 302, headers: { location: "/" } }),
+  );
+
+  const logoResponse = page.waitForResponse(
+    (response) =>
+      response.status() === 404 &&
+      response.url().endsWith("/brand/remedence-logo-primary-ui.png"),
+  );
+  await page.goto("/");
+  await logoResponse;
+  await page.evaluate(() => fetch("/redirect-probe"));
+
+  expect(failures.httpFailures).toHaveLength(1);
+  expect(failures.httpFailures[0]).toMatch(
+    /^404 .*\/brand\/remedence-logo-primary-ui\.png$/,
+  );
+  expect(failures.transportFailures).toEqual([]);
+});
+
 test("public site loads without console errors or failed application requests", async ({
   page,
 }) => {
-  const consoleErrors: string[] = [];
-  const pageErrors: string[] = [];
-  const failedRequests: string[] = [];
-
-  page.on("console", (message) => {
-    if (message.type() === "error") consoleErrors.push(message.text());
-  });
-  page.on("pageerror", (error) => pageErrors.push(error.message));
-  page.on("requestfailed", (request) => failedRequests.push(request.url()));
+  const failures = observeBrowserFailures(page);
 
   await page.goto("/");
   await page.getByRole("link", { name: /Explore the platform/i }).click();
   await expect(page.locator("#platform")).toBeInViewport();
 
-  expect(consoleErrors).toEqual([]);
-  expect(pageErrors).toEqual([]);
-  expect(failedRequests).toEqual([]);
+  expect(failures.consoleErrors).toEqual([]);
+  expect(failures.pageErrors).toEqual([]);
+  expect(failures.transportFailures).toEqual([]);
+  expect(failures.httpFailures).toEqual([]);
 });
