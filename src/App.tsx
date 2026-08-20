@@ -95,7 +95,12 @@ function App() {
             aria-label="Remedence home"
             onClick={() => setMenuOpen(false)}
           >
-            <img src="/brand/remedence-logo-primary.png" alt="Remedence" />
+            <img
+              src="/brand/remedence-logo-primary-ui.png"
+              alt="Remedence"
+              width={360}
+              height={120}
+            />
           </a>
 
           <nav className="desktop-nav" aria-label="Primary navigation">
@@ -619,7 +624,12 @@ function App() {
       <footer className="site-footer">
         <div className="section footer-inner">
           <a className="footer-brand" href="#top" aria-label="Remedence home">
-            <img src="/brand/remedence-logo-primary.png" alt="Remedence" />
+            <img
+              src="/brand/remedence-logo-primary-ui.png"
+              alt="Remedence"
+              width={360}
+              height={120}
+            />
           </a>
           <p>Security work. Proven complete.</p>
           <div className="footer-links">
