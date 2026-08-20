@@ -65,6 +65,25 @@ test("keyboard order exposes the skip link and mobile navigation works", async (
   ).toHaveAttribute("aria-expanded", "false");
 });
 
+test("responsive menu stays open until the desktop navigation breakpoint", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1000, height: 800 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Open navigation" }).click();
+  await expect(
+    page.getByRole("navigation", { name: "Mobile navigation" }),
+  ).toBeVisible();
+  await page.setViewportSize({ width: 1001, height: 800 });
+  await expect(
+    page.getByRole("navigation", { name: "Mobile navigation" }),
+  ).toBeVisible();
+  await page.setViewportSize({ width: 1120, height: 800 });
+  await expect(
+    page.getByRole("navigation", { name: "Mobile navigation" }),
+  ).toBeHidden();
+});
+
 test("public calls to action point only to real destinations", async ({
   page,
 }) => {

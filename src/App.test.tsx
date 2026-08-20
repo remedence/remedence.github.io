@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import App from "./App";
@@ -66,5 +66,40 @@ describe("Remedence public site", () => {
       "aria-expanded",
       "true",
     );
+  });
+
+  it("keeps responsive menu open through the mobile navigation breakpoint", async () => {
+    const originalWidth = window.innerWidth;
+    const user = userEvent.setup();
+
+    try {
+      Object.defineProperty(window, "innerWidth", {
+        configurable: true,
+        value: 1000,
+      });
+      render(<App />);
+
+      const toggle = document.querySelector<HTMLButtonElement>(".menu-toggle");
+      await user.click(toggle!);
+
+      Object.defineProperty(window, "innerWidth", {
+        configurable: true,
+        value: 1001,
+      });
+      fireEvent(window, new Event("resize"));
+      expect(document.getElementById("mobile-navigation")).toBeInTheDocument();
+
+      Object.defineProperty(window, "innerWidth", {
+        configurable: true,
+        value: 1120,
+      });
+      fireEvent(window, new Event("resize"));
+      expect(document.getElementById("mobile-navigation")).toBeNull();
+    } finally {
+      Object.defineProperty(window, "innerWidth", {
+        configurable: true,
+        value: originalWidth,
+      });
+    }
   });
 });

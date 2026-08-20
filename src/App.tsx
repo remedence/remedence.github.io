@@ -31,6 +31,8 @@ const navItems = [
   ["Company", "#company"],
 ] as const;
 
+const MOBILE_NAV_MAX_WIDTH = 1119;
+
 const workflow = [
   {
     number: "01",
@@ -75,7 +77,7 @@ function App() {
 
   useEffect(() => {
     const closeOnWideScreen = () => {
-      if (window.innerWidth >= 940) setMenuOpen(false);
+      if (window.innerWidth > MOBILE_NAV_MAX_WIDTH) setMenuOpen(false);
     };
     window.addEventListener("resize", closeOnWideScreen);
     return () => window.removeEventListener("resize", closeOnWideScreen);
