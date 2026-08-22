@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import App from "./App";
@@ -47,6 +47,48 @@ describe("Remedence public site", () => {
         "Public cloud availability and pricing will be published when they are ready.",
       ),
     ).toBeInTheDocument();
+  });
+
+  it("shows the real product workflow with five descriptive screenshots", () => {
+    render(<App />);
+
+    const productSection = screen.getByRole("region", {
+      name: "See Remedence in action",
+    });
+    const screenshots = within(productSection).getAllByRole("img");
+
+    expect(screenshots).toHaveLength(5);
+    expect(screenshots).toEqual([
+      expect.objectContaining({
+        alt: "Remedence dashboard showing the persisted security finding action queue",
+      }),
+      expect.objectContaining({
+        alt: "Remedence finding detail showing remediation awaiting independent verification",
+      }),
+      expect.objectContaining({
+        alt: "Remedence finding detail showing failed and passed independent verification history",
+      }),
+      expect.objectContaining({
+        alt: "Remedence locked evidence view for a verified security fix",
+      }),
+      expect.objectContaining({
+        alt: "Remedence immutable client report snapshot for a completed security review",
+      }),
+    ]);
+
+    const expectedSources = [
+      "/product/dashboard-action-queue.png",
+      "/product/remediation-verification-workflow.png",
+      "/product/failed-verification-history.png",
+      "/product/evidence-verified-closure.png",
+      "/product/immutable-report-snapshot.png",
+    ];
+
+    screenshots.forEach((image, index) => {
+      expect(image).toHaveAttribute("src", expectedSources[index]);
+      expect(image).toHaveAttribute("width", "1440");
+      expect(image).toHaveAttribute("height", "900");
+    });
   });
 
   it("exposes mobile navigation with an accessible toggle", async () => {

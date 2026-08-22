@@ -51,6 +51,44 @@ const workflow = [
   },
 ] as const;
 
+const productScreenshots = [
+  {
+    src: "/product/dashboard-action-queue.png",
+    alt: "Remedence dashboard showing the persisted security finding action queue",
+    label: "Action queue",
+    title: "Prioritize the work that actually needs attention.",
+    copy: "Persisted findings, verification state, severity, ownership, and SLA context stay visible in one operational queue.",
+  },
+  {
+    src: "/product/remediation-verification-workflow.png",
+    alt: "Remedence finding detail showing remediation awaiting independent verification",
+    label: "Remediation",
+    title: "Move completed remediation into independent verification.",
+    copy: "A completed change remains distinct from verified closure, with the remediation record retained for the next check.",
+  },
+  {
+    src: "/product/failed-verification-history.png",
+    alt: "Remedence finding detail showing failed and passed independent verification history",
+    label: "Verification history",
+    title: "Keep failed checks instead of rewriting history.",
+    copy: "Failed and later passing verification runs remain visible together so the path to closure stays inspectable.",
+  },
+  {
+    src: "/product/evidence-verified-closure.png",
+    alt: "Remedence locked evidence view for a verified security fix",
+    label: "Locked evidence",
+    title: "Preserve the proof behind a verified fix.",
+    copy: "Verification evidence is locked with source, verification, timing, and content-hash context after it is recorded.",
+  },
+  {
+    src: "/product/immutable-report-snapshot.png",
+    alt: "Remedence immutable client report snapshot for a completed security review",
+    label: "Reporting",
+    title: "Generate immutable snapshots from persisted state.",
+    copy: "Client reporting reflects the stored security record rather than a mutable presentation-only status.",
+  },
+] as const;
+
 const openSourceFeatures = [
   "Self-hosted local mode",
   "Persistent SQLite state",
@@ -317,6 +355,51 @@ function App() {
               </article>
             ))}
           </div>
+        </section>
+
+        <section
+          className="section product-showcase-section"
+          id="product"
+          aria-labelledby="product-showcase-title"
+        >
+          <div className="section-heading">
+            <p className="eyebrow">Product</p>
+            <h2 id="product-showcase-title">See Remedence in action</h2>
+            <p>
+              Real product captures from persistent local v1 using the fictional
+              Harborline demo dataset. Follow a finding from the action queue
+              through remediation, independent verification, locked evidence,
+              and reporting.
+            </p>
+          </div>
+          <div className="product-gallery">
+            {productScreenshots.map((screenshot, index) => (
+              <figure
+                key={screenshot.src}
+                className={`product-shot${index === 0 ? " product-shot-lead" : ""}`}
+              >
+                <div className="product-shot-frame">
+                  <img
+                    src={screenshot.src}
+                    alt={screenshot.alt}
+                    width={1440}
+                    height={900}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <figcaption>
+                  <span className="mono">{screenshot.label}</span>
+                  <h3>{screenshot.title}</h3>
+                  <p>{screenshot.copy}</p>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+          <p className="product-data-note">
+            All organizations, people, findings, identifiers, and workflow data
+            shown here are seeded fictional demo data.
+          </p>
         </section>
 
         <section
