@@ -173,6 +173,60 @@ test("public calls to action point only to real destinations", async ({
   ).toBeVisible();
 });
 
+test("real product screenshots load at native dimensions without distortion", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+
+  const productSection = page.getByRole("region", {
+    name: "See Remedence in action",
+  });
+  const screenshots = productSection.getByRole("img");
+  await expect(screenshots).toHaveCount(5);
+
+  for (let index = 0; index < 5; index += 1) {
+    const screenshot = screenshots.nth(index);
+    await screenshot.scrollIntoViewIfNeeded();
+    await expect
+      .poll(() =>
+        screenshot.evaluate((image: HTMLImageElement) => ({
+          complete: image.complete,
+          naturalWidth: image.naturalWidth,
+          naturalHeight: image.naturalHeight,
+        })),
+      )
+      .toEqual({ complete: true, naturalWidth: 1440, naturalHeight: 900 });
+
+    const renderedRatio = await screenshot.evaluate((image) => {
+      const bounds = image.getBoundingClientRect();
+      return bounds.width / bounds.height;
+    });
+    expect(Math.abs(renderedRatio - 1.6)).toBeLessThan(0.01);
+  }
+
+  await expect(
+    page.getByText(
+      "All organizations, people, findings, identifiers, and workflow data shown here are seeded fictional demo data.",
+    ),
+  ).toBeVisible();
+});
+
+test("publishes a valid public llms.txt instead of the SPA fallback", async ({
+  request,
+}) => {
+  const response = await request.get("/llms.txt");
+  const body = await response.text();
+
+  expect(response.ok()).toBe(true);
+  expect(response.headers()["content-type"]).toContain("text/plain");
+  expect(body).toMatch(/^# Remedence$/m);
+  expect(body).toContain("Persistent local v1");
+  expect(body).toContain("- [Source](https://github.com/remedence/remedence)");
+  expect(body).toContain("- [Public website](https://remedence.github.io/)");
+  expect(body).not.toContain("workers.dev");
+});
+
 test("reduced motion collapses routine transitions", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
