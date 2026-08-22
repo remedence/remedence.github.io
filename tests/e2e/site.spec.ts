@@ -163,6 +163,11 @@ test("public calls to action point only to real destinations", async ({
   await expect(page.getByRole("link", { name: /sign in/i })).toHaveCount(0);
   await expect(
     page.getByText(
+      "Persistent local core v1 is available on main with durable SQLite state, retained failed verification history, locked evidence, and immutable reports.",
+    ),
+  ).toBeVisible();
+  await expect(
+    page.getByText(
       "Public cloud availability and pricing will be published when they are ready.",
     ),
   ).toBeVisible();

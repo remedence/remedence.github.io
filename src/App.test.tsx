@@ -39,6 +39,11 @@ describe("Remedence public site", () => {
     ).not.toBeInTheDocument();
     expect(
       screen.getByText(
+        "Persistent local core v1 is available on main with durable SQLite state, retained failed verification history, locked evidence, and immutable reports.",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
         "Public cloud availability and pricing will be published when they are ready.",
       ),
     ).toBeInTheDocument();

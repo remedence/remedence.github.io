@@ -52,12 +52,14 @@ const workflow = [
 ] as const;
 
 const openSourceFeatures = [
-  "Self-hosted deployment",
+  "Self-hosted local mode",
+  "Persistent SQLite state",
   "API-first architecture",
   "Normalized findings",
   "Remediation workflow",
-  "Verification framework",
-  "Evidence records",
+  "Independent verification history",
+  "Locked evidence records",
+  "Immutable report snapshots",
   "Operational UI",
 ] as const;
 
@@ -206,7 +208,7 @@ function App() {
               </a>
             </div>
             <p className="availability-note">
-              Open core. API first. Self-hostable.
+              Open core. API first. Persistent local v1.
             </p>
           </div>
 
@@ -342,7 +344,7 @@ function App() {
                 </div>
               </div>
               <p>
-                Run the canonical platform yourself and keep the workflow
+                Run the persistent local core yourself and keep the workflow
                 inspectable.
               </p>
               <ul className="feature-list">
@@ -353,6 +355,11 @@ function App() {
                   </li>
                 ))}
               </ul>
+              <p className="release-note">
+                Persistent local core v1 is available on main with durable
+                SQLite state, retained failed verification history, locked
+                evidence, and immutable reports.
+              </p>
               <a
                 className="text-link"
                 href="https://github.com/remedence/remedence"
