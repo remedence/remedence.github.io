@@ -38,6 +38,8 @@ const viewports = [
   { name: "tablet", width: 1024, height: 768 },
   { name: "mobile-430", width: 430, height: 932 },
   { name: "mobile-390", width: 390, height: 844 },
+  { name: "mobile-360", width: 360, height: 800 },
+  { name: "mobile-320", width: 320, height: 720 },
 ] as const;
 
 for (const viewport of viewports) {
@@ -66,6 +68,26 @@ for (const viewport of viewports) {
     expect(horizontalOverflow).toBeLessThanOrEqual(1);
   });
 }
+
+test("desktop hero copy and verification trace share the same top edge", async ({
+  page,
+}) => {
+  for (const width of [1440, 1280, 1120]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/");
+
+    const [copyTop, traceTop] = await Promise.all([
+      page
+        .locator(".hero-copy")
+        .evaluate((element) => element.getBoundingClientRect().top),
+      page
+        .locator(".verification-trace")
+        .evaluate((element) => element.getBoundingClientRect().top),
+    ]);
+
+    expect(Math.abs(copyTop - traceTop)).toBeLessThanOrEqual(1);
+  }
+});
 
 test("keyboard order exposes the skip link and mobile navigation works", async ({
   page,

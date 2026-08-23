@@ -216,7 +216,7 @@ h3 {
   min-height: 710px;
   display: grid;
   grid-template-columns: minmax(0, 1.04fr) minmax(480px, 0.96fr);
-  align-items: center;
+  align-items: start;
   gap: 72px;
   padding-block: 76px 88px;
 }
