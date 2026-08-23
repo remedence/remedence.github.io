@@ -39,13 +39,19 @@ describe("Remedence public site", () => {
     ).not.toBeInTheDocument();
     expect(
       screen.getByText(
-        "Persistent local core v1 is available on main with durable SQLite state, retained failed verification history, locked evidence, and immutable reports.",
+        /Persistent local core v1 is available on main with durable SQLite state, retained failed verification history, locked evidence, and immutable reports/,
       ),
     ).toBeInTheDocument();
     expect(
       screen.getByText(
-        "Public cloud availability and pricing will be published when they are ready.",
+        "Planned only: Remedence Cloud is not implemented or available. No public pricing or launch date has been announced.",
       ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("Local v1 has no user authentication."),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/No explicit product license has been published yet/),
     ).toBeInTheDocument();
   });
 

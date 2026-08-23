@@ -1,6 +1,6 @@
 # Remedence website
 
-Official public website for Remedence, an open-source security remediation, independent verification, and evidence platform.
+Official public website for Remedence, a publicly developed security remediation, independent verification, and evidence platform. The product repository does not currently publish an explicit license.
 
 **Security work. Proven complete.**
 

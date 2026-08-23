@@ -13,6 +13,7 @@ import {
   Network,
   Server,
   TerminalSquare,
+  Timer,
   Users,
   X,
   XCircle,
@@ -218,7 +219,7 @@ function App() {
       <main id="main-content">
         <section className="hero section" id="top" aria-labelledby="hero-title">
           <div className="hero-copy">
-            <p className="eyebrow">Open source</p>
+            <p className="eyebrow">Source available · license pending</p>
             <p className="hero-kicker">Verified security remediation</p>
             <h1 id="hero-title">Security work. Proven complete.</h1>
             <p className="hero-lede">
@@ -245,8 +246,19 @@ function App() {
                 <ArrowRight aria-hidden="true" size={18} />
               </a>
             </div>
+            <aside
+              className="trust-boundary"
+              aria-label="Local v1 security boundary"
+            >
+              <strong>Local v1 has no user authentication.</strong>
+              <span>
+                It binds to <code>127.0.0.1</code> and must not be exposed
+                directly to an untrusted network.
+              </span>
+            </aside>
             <p className="availability-note">
-              Open core. API first. Persistent local v1.
+              Source available. API first. Persistent local v1. No explicit
+              product license has been published yet.
             </p>
           </div>
 
@@ -408,13 +420,13 @@ function App() {
           aria-labelledby="ecosystem-title"
         >
           <div className="section-heading">
-            <p className="eyebrow">Ecosystem</p>
+            <p className="eyebrow">Deployment paths</p>
             <h2 id="ecosystem-title">
-              Open where control matters. Managed where operations get heavy.
+              Run local v1 today. Evaluate managed operations as future work.
             </h2>
             <p>
-              Use the open-source core on your infrastructure, then add managed
-              operations when the tradeoff makes sense.
+              The public repository contains the implemented local product.
+              Cloud capabilities below describe direction, not availability.
             </p>
           </div>
           <div className="ecosystem-split">
@@ -422,7 +434,7 @@ function App() {
               <div className="ecosystem-title-row">
                 <Server aria-hidden="true" />
                 <div>
-                  <p className="mono">REMEDENCE OPEN SOURCE</p>
+                  <p className="mono">REMEDENCE LOCAL V1</p>
                   <h3>Own the remediation record.</h3>
                 </div>
               </div>
@@ -441,7 +453,8 @@ function App() {
               <p className="release-note">
                 Persistent local core v1 is available on main with durable
                 SQLite state, retained failed verification history, locked
-                evidence, and immutable reports.
+                evidence, and immutable reports. The repository is publicly
+                readable, but no explicit product license has been published.
               </p>
               <a
                 className="text-link"
@@ -457,25 +470,26 @@ function App() {
               <div className="ecosystem-title-row">
                 <Cloud aria-hidden="true" />
                 <div>
-                  <p className="mono">REMEDENCE CLOUD</p>
-                  <h3>Reduce the operating burden.</h3>
+                  <p className="mono">REMEDENCE CLOUD · PLANNED</p>
+                  <h3>Future managed operations.</h3>
                 </div>
               </div>
               <p>
-                The managed layer is for teams that want hosted execution and
-                MSP-scale operations without running every service themselves.
+                These are proposed capabilities for teams that may eventually
+                want hosted execution and MSP-scale operations.
               </p>
               <ul className="feature-list">
                 {cloudCapabilities.map((feature) => (
                   <li key={feature}>
-                    <CheckCircle2 aria-hidden="true" />
+                    <Timer aria-hidden="true" />
+                    <span className="sr-only">Planned: </span>
                     {feature}
                   </li>
                 ))}
               </ul>
               <p className="release-note">
-                Public cloud availability and pricing will be published when
-                they are ready.
+                Planned only: Remedence Cloud is not implemented or available.
+                No public pricing or launch date has been announced.
               </p>
             </article>
           </div>
@@ -660,7 +674,7 @@ function App() {
                 <GitBranch aria-hidden="true" />
                 <span>
                   <strong>Source</strong>
-                  <small>Canonical open-source repository</small>
+                  <small>Public source; explicit license pending</small>
                 </span>
                 <ArrowRight aria-hidden="true" />
               </a>
@@ -708,7 +722,7 @@ function App() {
           <article id="company">
             <Building2 aria-hidden="true" />
             <p className="eyebrow">Company</p>
-            <h2>Remedence is being built in the open.</h2>
+            <h2>Remedence is being developed in a public repository.</h2>
             <p>
               Follow the public repository for the implementation, architecture,
               and project history. We do not publish invented customer claims or

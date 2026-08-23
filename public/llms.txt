@@ -1,6 +1,6 @@
 # Remedence
 
-> Remedence is an open-source, API-first security remediation platform focused on independent verification and evidence-backed closure.
+> Remedence is a publicly developed, API-first security remediation platform focused on independent verification and evidence-backed closure. Its product repository does not currently publish an explicit license.
 
 ## Product rule
 
@@ -14,7 +14,9 @@ Persistent local v1 is available on the public main branch with durable SQLite s
 
 The public product screenshots use the fictional Harborline Technology Group demo dataset. They do not show customer data.
 
-Public cloud availability and pricing have not been announced.
+Remedence Cloud is planned, not implemented or available. Public cloud pricing and a launch date have not been announced.
+
+Local v1 has no user authentication, binds to 127.0.0.1, and must not be exposed directly to an untrusted network.
 
 ## Canonical resources
 
