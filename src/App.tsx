@@ -255,13 +255,13 @@ function App() {
             aria-label="Example independent verification trace"
           >
             <div className="trace-header">
-              <div>
-                <span className="mono trace-id">SEC-1042</span>
+              <span className="mono trace-id">SEC-1042</span>
+              <div className="trace-heading-row">
                 <h2>Verification trace</h2>
+                <span className="status status-failed">
+                  <XCircle aria-hidden="true" /> First check failed
+                </span>
               </div>
-              <span className="status status-failed">
-                <XCircle aria-hidden="true" /> First check failed
-              </span>
             </div>
             <p className="trace-title">SQL injection in patient-export API</p>
             <ol className="trace-list">

@@ -89,6 +89,59 @@ test("desktop hero copy and verification trace share the same top edge", async (
   }
 });
 
+test("verification status aligns with the verification trace heading", async ({
+  page,
+}) => {
+  for (const width of [1440, 1280, 1120]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/");
+
+    const [headingBox, statusBox] = await Promise.all([
+      page
+        .getByRole("heading", { level: 2, name: "Verification trace" })
+        .boundingBox(),
+      page.locator(".status-failed").boundingBox(),
+    ]);
+
+    expect(headingBox).not.toBeNull();
+    expect(statusBox).not.toBeNull();
+
+    const headingCenter = headingBox!.y + headingBox!.height / 2;
+    const statusCenter = statusBox!.y + statusBox!.height / 2;
+    expect(Math.abs(headingCenter - statusCenter)).toBeLessThanOrEqual(2);
+  }
+});
+
+test("verification trace icons stay centered inside their marker circles", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+
+  const offsets = await page.locator(".trace-marker").evaluateAll((markers) =>
+    markers.map((marker) => {
+      const markerBox = marker.getBoundingClientRect();
+      const iconBox = marker.querySelector("svg")!.getBoundingClientRect();
+      return {
+        x:
+          iconBox.left +
+          iconBox.width / 2 -
+          (markerBox.left + markerBox.width / 2),
+        y:
+          iconBox.top +
+          iconBox.height / 2 -
+          (markerBox.top + markerBox.height / 2),
+      };
+    }),
+  );
+
+  expect(offsets).toHaveLength(5);
+  for (const offset of offsets) {
+    expect(Math.abs(offset.x)).toBeLessThanOrEqual(0.5);
+    expect(Math.abs(offset.y)).toBeLessThanOrEqual(0.5);
+  }
+});
+
 test("keyboard order exposes the skip link and mobile navigation works", async ({
   page,
 }) => {

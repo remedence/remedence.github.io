@@ -338,12 +338,17 @@ code {
 }
 
 .trace-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 24px;
+  display: grid;
+  gap: 6px;
   padding: 0 24px 18px;
   border-bottom: 1px solid var(--divider);
+}
+
+.trace-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
 }
 
 .trace-id {
@@ -353,7 +358,7 @@ code {
 }
 
 .trace-header h2 {
-  margin: 6px 0 0;
+  margin: 0;
   font-size: 20px;
   line-height: 1.25;
 }
@@ -427,6 +432,7 @@ code {
 }
 
 .trace-marker svg {
+  display: block;
   width: 15px;
   height: 15px;
 }
@@ -436,7 +442,7 @@ code {
 }
 
 .trace-list strong,
-.trace-list span {
+.trace-list li > div > span {
   display: block;
 }
 
@@ -1254,8 +1260,8 @@ code {
     min-height: 48px;
   }
 
-  .trace-header {
-    align-items: stretch;
+  .trace-heading-row {
+    align-items: flex-start;
     flex-direction: column;
     gap: 12px;
   }
