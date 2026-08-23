@@ -19,17 +19,18 @@ import {
   XCircle,
 } from "lucide-react";
 import "./App.css";
+import SitePage from "./SitePage";
 
 const navItems = [
   ["Platform", "#platform"],
-  ["Open Source", "#open-source"],
-  ["API", "#api"],
-  ["Integrations", "#integrations"],
-  ["Cloud", "#cloud"],
-  ["Security", "#security"],
-  ["Docs", "#docs"],
+  ["Source", "/open-source/"],
+  ["API", "/docs/api/"],
+  ["Integrations", "/integrations/"],
+  ["Cloud (planned)", "/cloud/"],
+  ["Security", "/security/"],
+  ["Docs", "/docs/"],
   ["Partners", "#partners"],
-  ["Company", "#company"],
+  ["Company", "/company/"],
 ] as const;
 
 const MOBILE_NAV_MAX_WIDTH = 1119;
@@ -113,7 +114,7 @@ const cloudCapabilities = [
   "Backup and support",
 ] as const;
 
-function App() {
+function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuToggleRef = useRef<HTMLButtonElement>(null);
 
@@ -231,8 +232,12 @@ function App() {
               status field.
             </p>
             <div className="hero-actions" aria-label="Primary actions">
+              <a className="button button-primary" href="/get-started/">
+                Get started locally
+                <ArrowRight aria-hidden="true" size={18} />
+              </a>
               <a
-                className="button button-primary"
+                className="button button-secondary"
                 href="https://github.com/remedence/remedence"
                 target="_blank"
                 rel="noreferrer"
@@ -240,10 +245,6 @@ function App() {
                 View on GitHub
                 <GitBranch aria-hidden="true" size={18} />
                 <span className="sr-only"> (opens in a new tab)</span>
-              </a>
-              <a className="button button-secondary" href="#platform">
-                Explore the platform
-                <ArrowRight aria-hidden="true" size={18} />
               </a>
             </div>
             <aside
@@ -385,28 +386,51 @@ function App() {
             </p>
           </div>
           <div className="product-gallery">
-            {productScreenshots.map((screenshot, index) => (
-              <figure
-                key={screenshot.src}
-                className={`product-shot${index === 0 ? " product-shot-lead" : ""}`}
-              >
-                <div className="product-shot-frame">
-                  <img
-                    src={screenshot.src}
-                    alt={screenshot.alt}
-                    width={1440}
-                    height={900}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-                <figcaption>
-                  <span className="mono">{screenshot.label}</span>
-                  <h3>{screenshot.title}</h3>
-                  <p>{screenshot.copy}</p>
-                </figcaption>
-              </figure>
-            ))}
+            {productScreenshots.map((screenshot, index) => {
+              const base = screenshot.src.replace(/\.png$/, "");
+              return (
+                <figure
+                  key={screenshot.src}
+                  className={`product-shot${index === 0 ? " product-shot-lead" : ""}`}
+                >
+                  <div className="product-shot-frame">
+                    <picture>
+                      <source
+                        type="image/avif"
+                        srcSet={`${base}-720.avif 720w, ${base}.avif 1440w`}
+                        sizes={
+                          index === 0
+                            ? "(max-width: 1119px) 100vw, 75vw"
+                            : "(max-width: 680px) 100vw, 50vw"
+                        }
+                      />
+                      <source
+                        type="image/webp"
+                        srcSet={`${base}-720.webp 720w, ${base}.webp 1440w`}
+                        sizes={
+                          index === 0
+                            ? "(max-width: 1119px) 100vw, 75vw"
+                            : "(max-width: 680px) 100vw, 50vw"
+                        }
+                      />
+                      <img
+                        src={screenshot.src}
+                        alt={screenshot.alt}
+                        width={1440}
+                        height={900}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </picture>
+                  </div>
+                  <figcaption>
+                    <span className="mono">{screenshot.label}</span>
+                    <h3>{screenshot.title}</h3>
+                    <p>{screenshot.copy}</p>
+                  </figcaption>
+                </figure>
+              );
+            })}
           </div>
           <p className="product-data-note">
             All organizations, people, findings, identifiers, and workflow data
@@ -762,12 +786,18 @@ function App() {
               GitHub
             </a>
             <a href="#api">API</a>
-            <a href="#docs">Docs</a>
+            <a href="/docs/">Docs</a>
+            <a href="/legal/privacy/">Privacy</a>
           </div>
         </div>
       </footer>
     </div>
   );
+}
+
+function App() {
+  const path = window.location.pathname.replace(/\/index\.html$/, "/");
+  return path === "/" ? <HomePage /> : <SitePage path={path} />;
 }
 
 export default App;

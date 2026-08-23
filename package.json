@@ -5,16 +5,18 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "check": "npm run format:check && npm run lint && npm run typecheck && npm test && npm run build && npm run e2e",
+    "build": "tsc -b && vite build && node scripts/build-routes.mjs",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm test && npm run build && npm run e2e && npm run check:links && npm run lighthouse",
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc -b --pretty false",
-    "format": "prettier --write src/App.tsx src/App.css src/index.css src/App.test.tsx src/test/setup.ts index.html package.json vitest.config.ts tests playwright.config.ts README.md",
-    "format:check": "prettier --check src/App.tsx src/App.css src/index.css src/App.test.tsx src/test/setup.ts index.html package.json vitest.config.ts tests playwright.config.ts README.md",
-    "e2e": "playwright test"
+    "format": "prettier --write src/App.tsx src/App.css src/ApiDocs.tsx src/SitePage.tsx src/index.css src/App.test.tsx src/test/setup.ts index.html package.json vitest.config.ts vite.config.ts playwright.config.ts tests scripts docs README.md .github/workflows/deploy-pages.yml lighthouserc.json",
+    "format:check": "prettier --check src/App.tsx src/App.css src/ApiDocs.tsx src/SitePage.tsx src/index.css src/App.test.tsx src/test/setup.ts index.html package.json vitest.config.ts vite.config.ts playwright.config.ts tests scripts docs README.md .github/workflows/deploy-pages.yml lighthouserc.json",
+    "e2e": "playwright test",
+    "check:links": "node scripts/check-public-site.mjs",
+    "lighthouse": "node scripts/run-lighthouse.mjs"
   },
   "dependencies": {
     "@fontsource/ibm-plex-mono": "^5.3.0",
@@ -33,11 +35,14 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.4",
+    "chrome-launcher": "^1.2.1",
     "jsdom": "^30.0.1",
+    "lighthouse": "^13.4.1",
     "oxlint": "^1.75.0",
     "prettier": "^3.9.6",
     "typescript": "~6.0.2",
     "vite": "^8.2.0",
-    "vitest": "^4.1.11"
+    "vitest": "^4.1.11",
+    "yaml": "^2.8.1"
   }
 }

@@ -1,6 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://remedence.github.io/</loc>
-  </url>
+  <url><loc>https://remedence.github.io/</loc></url>
+  <url><loc>https://remedence.github.io/product/</loc></url>
+  <url><loc>https://remedence.github.io/open-source/</loc></url>
+  <url><loc>https://remedence.github.io/cloud/</loc></url>
+  <url><loc>https://remedence.github.io/integrations/</loc></url>
+  <url><loc>https://remedence.github.io/get-started/</loc></url>
+  <url><loc>https://remedence.github.io/security/</loc></url>
+  <url><loc>https://remedence.github.io/company/</loc></url>
+  <url><loc>https://remedence.github.io/contact/</loc></url>
+  <url><loc>https://remedence.github.io/roadmap/</loc></url>
+  <url><loc>https://remedence.github.io/changelog/</loc></url>
+  <url><loc>https://remedence.github.io/status/</loc></url>
+  <url><loc>https://remedence.github.io/docs/</loc></url>
+  <url><loc>https://remedence.github.io/docs/install/</loc></url>
+  <url><loc>https://remedence.github.io/docs/architecture/</loc></url>
+  <url><loc>https://remedence.github.io/docs/administration/</loc></url>
+  <url><loc>https://remedence.github.io/docs/api/</loc></url>
+  <url><loc>https://remedence.github.io/docs/troubleshooting/</loc></url>
+  <url><loc>https://remedence.github.io/docs/upgrades/</loc></url>
+  <url><loc>https://remedence.github.io/docs/security/</loc></url>
+  <url><loc>https://remedence.github.io/solutions/msps/</loc></url>
+  <url><loc>https://remedence.github.io/solutions/security-teams/</loc></url>
+  <url><loc>https://remedence.github.io/solutions/vciso/</loc></url>
+  <url><loc>https://remedence.github.io/solutions/auditors/</loc></url>
+  <url><loc>https://remedence.github.io/solutions/integrators/</loc></url>
+  <url><loc>https://remedence.github.io/legal/privacy/</loc></url>
+  <url><loc>https://remedence.github.io/legal/terms/</loc></url>
+  <url><loc>https://remedence.github.io/legal/acceptable-use/</loc></url>
+  <url><loc>https://remedence.github.io/legal/trademark/</loc></url>
+  <url><loc>https://remedence.github.io/legal/cookies/</loc></url>
+  <url><loc>https://remedence.github.io/legal/accessibility/</loc></url>
 </urlset>

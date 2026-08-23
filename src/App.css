@@ -151,6 +151,27 @@ h3 {
   gap: 4px;
 }
 
+.page-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.page-nav a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding-inline: 10px;
+  color: var(--muted);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.page-nav a:hover {
+  color: var(--text);
+}
+
 .desktop-nav a,
 .header-github,
 .mobile-nav a,
@@ -1050,6 +1071,168 @@ code {
   background: var(--surface);
 }
 
+.content-page {
+  min-height: calc(100vh - 194px);
+  padding-block: 88px 112px;
+}
+
+.content-hero {
+  max-width: 860px;
+  padding-bottom: 56px;
+  border-bottom: 1px solid var(--border-strong);
+}
+
+.content-hero h1 {
+  max-width: 18ch;
+  margin-bottom: 22px;
+  font-size: clamp(42px, 6vw, 72px);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+}
+
+.content-hero > p:last-child {
+  max-width: 66ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: 19px;
+  line-height: 1.62;
+}
+
+.content-sections {
+  max-width: 900px;
+}
+
+.content-sections > section {
+  padding-block: 46px;
+  border-bottom: 1px solid var(--divider);
+}
+
+.content-sections h2 {
+  margin-bottom: 18px;
+  font-size: 28px;
+}
+
+.content-sections p,
+.content-sections li {
+  max-width: 76ch;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.content-sections li + li {
+  margin-top: 8px;
+}
+
+.content-sections pre {
+  overflow-x: auto;
+  padding: 20px;
+  border: 1px solid #3c4945;
+  border-radius: 6px;
+  background: var(--text);
+  color: #f6f8f7;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.link-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--border-strong);
+}
+
+.link-grid a {
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--divider);
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.link-grid a:nth-child(even) {
+  border-left: 1px solid var(--divider);
+}
+
+.link-grid a:hover {
+  background: var(--surface-subtle);
+}
+
+.api-docs {
+  max-width: none;
+}
+
+.api-docs .trust-boundary {
+  margin-bottom: 28px;
+}
+
+.api-reference-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.api-reference-heading h3,
+.api-reference-heading p {
+  margin: 0;
+}
+
+.api-reference-heading label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.api-reference-heading input {
+  min-width: 280px;
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+}
+
+.operation-list {
+  border-top: 1px solid var(--border-strong);
+}
+
+.operation-list details {
+  border-bottom: 1px solid var(--divider);
+}
+
+.operation-list summary {
+  min-height: 62px;
+  display: grid;
+  grid-template-columns: 64px minmax(190px, 1fr) minmax(180px, 1fr);
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+}
+
+.operation-list summary > span:last-child {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.operation-list .method {
+  font-weight: 700;
+}
+
+.operation-detail {
+  padding: 4px 18px 22px 78px;
+}
+
+.operation-detail p {
+  margin-block: 8px;
+}
+
 .footer-inner {
   min-height: 116px;
   display: grid;
@@ -1124,6 +1307,7 @@ code {
   }
 
   .desktop-nav,
+  .page-nav,
   .header-github {
     display: none;
   }
@@ -1449,6 +1633,45 @@ code {
 
   .footer-links {
     margin-left: -8px;
+  }
+
+  .content-page {
+    padding-block: 58px 80px;
+  }
+
+  .link-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .link-grid a:nth-child(even) {
+    border-left: 0;
+  }
+
+  .api-reference-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .api-reference-heading input {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .operation-list summary {
+    grid-template-columns: 58px minmax(0, 1fr);
+    padding-block: 12px;
+  }
+
+  .operation-list summary > span:last-child {
+    grid-column: 2;
+  }
+
+  .operation-list summary code {
+    overflow-wrap: anywhere;
+  }
+
+  .operation-detail {
+    padding-left: 72px;
   }
 }
 

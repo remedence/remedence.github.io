@@ -35,3 +35,5 @@ GitHub Pages deploys from `main` through `.github/workflows/deploy-pages.yml`.
 Production URL: https://remedence.github.io/
 
 The approved Remedence brand assets live under `public/brand`, `public/favicons`, and `public/social`. They are sourced from the project Drive and must not be replaced with generated logo artwork.
+
+`public/openapi.yaml` is a content-equivalent release snapshot of the product repository's canonical `api/openapi.yaml` (with this repository's LF line endings). Refresh it from that authority whenever the public API contract changes; the site build derives `openapi.json` for the interactive reference.

@@ -164,8 +164,8 @@ test("keyboard order exposes the skip link and mobile navigation works", async (
 
   const mobileNav = page.getByRole("navigation", { name: "Mobile navigation" });
   await expect(mobileNav).toBeVisible();
-  await mobileNav.getByRole("link", { name: "API", exact: true }).click();
-  await expect(page.locator("#api")).toBeInViewport();
+  await mobileNav.getByRole("link", { name: "Platform", exact: true }).click();
+  await expect(page.locator("#platform")).toBeInViewport();
   await expect(
     page.getByRole("button", { name: "Open navigation" }),
   ).toHaveAttribute("aria-expanded", "false");
@@ -221,8 +221,8 @@ test("public calls to action point only to real destinations", async ({
     page.getByRole("link", { name: /View on GitHub/i }).first(),
   ).toHaveAttribute("href", "https://github.com/remedence/remedence");
   await expect(
-    page.getByRole("link", { name: /Explore the platform/i }),
-  ).toHaveAttribute("href", "#platform");
+    page.getByRole("link", { name: /Get started locally/i }),
+  ).toHaveAttribute("href", "/get-started/");
   await expect(
     page.getByRole("link", { name: /View the API/i }),
   ).toHaveAttribute(
@@ -272,9 +272,20 @@ test("real product screenshots load at native dimensions without distortion", as
           complete: image.complete,
           naturalWidth: image.naturalWidth,
           naturalHeight: image.naturalHeight,
+          currentSrc: image.currentSrc,
         })),
       )
-      .toEqual({ complete: true, naturalWidth: 1440, naturalHeight: 900 });
+      .toEqual(
+        expect.objectContaining({
+          complete: true,
+          currentSrc: expect.stringMatching(/\.(avif|webp)$/),
+        }),
+      );
+
+    const naturalRatio = await screenshot.evaluate(
+      (image) => image.naturalWidth / image.naturalHeight,
+    );
+    expect(Math.abs(naturalRatio - 1.6)).toBeLessThan(0.01);
 
     const renderedRatio = await screenshot.evaluate((image) => {
       const bounds = image.getBoundingClientRect();
@@ -309,7 +320,7 @@ test("reduced motion collapses routine transitions", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   const transitionDuration = await page
-    .getByRole("link", { name: /Explore the platform/i })
+    .getByRole("link", { name: /Get started locally/i })
     .evaluate((element) => getComputedStyle(element).transitionDuration);
   expect(Number.parseFloat(transitionDuration)).toBeLessThanOrEqual(0.001);
 });
@@ -363,11 +374,83 @@ test("public site loads without console errors or failed application requests", 
   const failures = observeBrowserFailures(page);
 
   await page.goto("/");
-  await page.getByRole("link", { name: /Explore the platform/i }).click();
-  await expect(page.locator("#platform")).toBeInViewport();
+  await page.getByRole("link", { name: /Get started locally/i }).click();
+  await expect(
+    page.getByRole("heading", {
+      level: 1,
+      name: "Run the five-minute Remedence demo.",
+    }),
+  ).toBeVisible();
 
   expect(failures.consoleErrors).toEqual([]);
   expect(failures.pageErrors).toEqual([]);
   expect(failures.transportFailures).toEqual([]);
   expect(failures.httpFailures).toEqual([]);
+});
+
+test("crawlable release routes expose truthful public boundaries", async ({
+  page,
+}) => {
+  const expectations = [
+    ["/get-started/", "Run the five-minute Remedence demo."],
+    ["/docs/", "Operate from the implemented contract."],
+    ["/security/", "Implemented controls and missing controls, side by side."],
+    ["/cloud/", "Remedence Cloud is future work."],
+    ["/open-source/", "Public source. License pending."],
+    ["/contact/", "No public intake channel is configured yet."],
+  ] as const;
+
+  for (const [route, heading] of expectations) {
+    await page.goto(route);
+    await expect(
+      page.getByRole("heading", { level: 1, name: heading }),
+    ).toBeVisible();
+  }
+});
+
+test("interactive API reference uses the canonical unauthenticated contract", async ({
+  page,
+}) => {
+  await page.goto("/docs/api/");
+  await expect(
+    page.getByRole("heading", {
+      level: 1,
+      name: "Canonical OpenAPI 3.1 reference.",
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Authentication is unavailable in local v1."),
+  ).toBeVisible();
+  await expect(page.getByText("Remedence API", { exact: true })).toBeVisible();
+  await expect(page.getByLabel("Filter operations")).toBeVisible();
+  await expect(page.getByRole("button", { name: /try it out/i })).toHaveCount(
+    0,
+  );
+});
+
+test("documentation routes have no automated WCAG AA violations", async ({
+  page,
+}) => {
+  for (const route of ["/get-started/", "/docs/", "/docs/api/", "/security/"]) {
+    await page.goto(route);
+    const results = await new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
+      .analyze();
+    expect(results.violations, route).toEqual([]);
+  }
+});
+
+test("public route sitemap and OpenAPI contract are static assets", async ({
+  request,
+}) => {
+  const [sitemap, openapi] = await Promise.all([
+    request.get("/sitemap.xml"),
+    request.get("/openapi.yaml"),
+  ]);
+  expect(sitemap.ok()).toBe(true);
+  expect(await sitemap.text()).toContain(
+    "https://remedence.github.io/docs/api/",
+  );
+  expect(openapi.ok()).toBe(true);
+  expect(await openapi.text()).toMatch(/^openapi: 3\.1\.0/m);
 });
